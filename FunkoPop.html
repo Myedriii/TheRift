@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Rift</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="navbar">
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <div class="menu-icon"></div>
+      <div class="menu-icon"></div>
+      <div class="menu-icon"></div>
+    </div>
+    <div class="store-name">The Rift</div> <!-- Centered Store Name -->
+    <div class="sidebar" id="sidebar">
+      <ul>
+        <li><a href="#" onclick="showContent('home')">Home</a></li>
+        <li><a href="#" onclick="showContent('products')">Products</a></li>
+        <li><a href="#" onclick="showContent('about')">About Us</a></li>
+        <li><a href="#" onclick="showContent('contact')">Contact</a></li>
+        <li><a href="#" onclick="showContent('cart')">Cart</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="content" id="home">
+    <h1 class="welcome-text">Welcome to The Rift</h1>
+  </div>
+
+  <div class="content" id="products" style="display: none;">
+    <h2>Products</h2>
+    <h3>Formula 1 Series</h3>
+    <div class="products-container">
+      <div class="product">
+        <img src="max.jpeg" alt="Max Verstappen">
+        <h3>Max Verstappen</h3>
+        <p>Price: ₱700</p>
+        <button class="button" onclick="addToCart('Max Verstappen', 700)">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src="lewis.jpg" alt="Lewis Hamilton">
+        <h3>Lewis Hamilton</h3>
+        <p>Price: ₱700</p>
+        <button class="button" onclick="addToCart('Lewis Hamilton', 700)">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src="checo.jpg" alt="Checo Perez">
+        <h3>Sergio Perez</h3>
+        <p>Price: ₱650</p>
+        <button class="button" onclick="addToCart('Sergio Perez', 650)">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src="russel.jpg" alt="George Russell">
+        <h3>George Russell</h3>
+        <p>Price: ₱650</p>
+        <button class="button" onclick="addToCart('George Russell', 650)">Add to Cart</button>
+      </div>
+    </div>
+    <h3>Five Nights At Freddy's Series</h3>
+    <div class="products-container">
+      <div class="product">
+        <img src="freddy.jpg" alt="Freddy Fazbear">
+        <h3>Freddy Fazbear</h3>
+        <p>Price: ₱750</p>
+        <button class="button" onclick="addToCart('Freddy Fazbear', 750)">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src="bonnie.jpg" alt="Bonnie">
+        <h3>Bonnie</h3>
+        <p>Price: ₱700</p>
+        <button class="button" onclick="addToCart('Bonnie', 700)">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src="foxy.jpg" alt="Foxy the Pirate">
+        <h3>Foxy the Pirate</h3>
+        <p>Price: ₱700</p>
+        <button class="button" onclick="addToCart('Foxy the Pirate', 700)">Add to Cart</button>
+      </div>
+      <div class="product">
+        <img src="chica.jpg" alt="Chica">
+        <h3>Chica</h3>
+        <p>Price: ₱700</p>
+        <button class="button" onclick="addToCart('Chica', 700)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="content" id="about" style="display: none;">
+    <div class="about-info">
+      <h2>About Us</h2>
+      <p class="justified-text">We at The Rift are committed to making collectors and enthusiasts around the country happy and excited. Located in the center of the Philippines, our compact yet lively shop is a Funko Pop lover's paradise! enthusiasts, providing a wide selection of your preferred characters from your favorite movies, TV shows, and more.</p>
+      <p class="justified-text">Whether you're looking to expand your collection, find the perfect gift, or simply indulge in your love for pop culture, The Rift is here to make your Funko Pop! dreams a reality. Join us on this exciting adventure as we celebrate all things Funko together!</p>
+    </div>
+  </div>
+
+  <div class="content" id="contact" style="display: none;">
+    <div class="contact-info">
+      <h2>Contact Us Now</h2>
+      <p>Contact information:</p>
+      <p>Facebook Page: The Rift Store</p>
+      <p>Instagram Page: theriftofficial</p>
+      <p>Email: TheRiftinquries@gmail.com</p>
+      <p>Store Phone Number: 09991234569</p>
+    </div>
+  </div>
+
+  <div class="content" id="cart" style="display: none;">
+    <div class="cart-summary">
+      <h2>Order Summary</h2>
+      <div id="cart-items"></div>
+      <h3>Total: ₱<span id="cart-total">0</span></h3>
+      <form id="checkout-form" onsubmit="handleCheckout(event)">
+        <div>
+          <label for="name">Name:</label>
+          <input type="text" id="name" required>
+        </div>
+        <div>
+          <label for="money">Payment Amount (₱):</label>
+          <input type="number" id="money" required>
+        </div>
+        <button type="submit" class="button">Checkout</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let cart = [];
+
+    function toggleMenu() {
+      document.getElementById('sidebar').classList.toggle('active');
+    }
+
+    function showContent(contentId) {
+      const contents = document.querySelectorAll('.content');
+      contents.forEach(content => {
+        if (content.id === contentId) {
+          content.style.display = 'block';
+        } else {
+          content.style.display = 'none';
+        }
+      });
+    }
+
+    function addToCart(item, price) {
+      cart.push({ item, price });
+      updateCart();
+    }
+
+    function updateCart() {
+      const cartItemsElement = document.getElementById('cart-items');
+      cartItemsElement.innerHTML = '';
+      cart.forEach(({ item, price }) => {
+        const itemElement = document.createElement('div');
+        itemElement.textContent = `${item} - ₱${price}`;
+        cartItemsElement.appendChild(itemElement);
+      });
+      const cartTotalElement = document.getElementById('cart-total');
+      const totalPrice = cart.reduce((sum, { price }) => sum + price, 0);
+      cartTotalElement.textContent = totalPrice;
+    }
+
+    function handleCheckout(event) {
+      event.preventDefault();
+      const name = document.getElementById('name').value;
+      const money = parseFloat(document.getElementById('money').value);
+      const total = parseFloat(document.getElementById('cart-total').textContent);
+      if (money < total) {
+        alert('Insufficient payment. Please enter a valid amount.');
+        return;
+      }
+      const change = money - total;
+      let orderSummary = `Order Summary:\n\nName: ${name}\n\nItems:\n`;
+      cart.forEach(({ item, price }) => {
+        orderSummary += `${item} - ₱${price}\n`;
+      });
+      orderSummary += `\nTotal: ₱${total}\nPayment: ₱${money}\nChange: ₱${change.toFixed(2)}`;
+      alert(orderSummary);
+      cart = [];
+      updateCart();
+      document.getElementById('checkout-form').reset();
+      showContent('home');
+    }
+
+    window.addEventListener('scroll', () => {
+      document.getElementById('sidebar').classList.remove('active');
+    });
+  </script>
+</body>
+</html>
